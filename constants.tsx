@@ -67,6 +67,19 @@ const milkStarchTest: TestProcedure = {
   precautions: ["Cool the milk before adding iodine."]
 };
 
+const milkDetergentTest: TestProcedure = {
+  aim: "To detect detergent in milk.",
+  materials: ["Glass bottle or test tube", "Water", "Milk sample"],
+  procedure: [
+    "Take equal amounts of milk and water in a bottle.",
+    "Shake the mixture vigorously for 1-2 minutes.",
+    "Observe the lather formed."
+  ],
+  observation: "Pure milk forms a thin foam layer due to agitation. Adulterated milk forms a dense, soapy lather that persists.",
+  conclusion: "Persistent soapy lather indicates the presence of detergent.",
+  precautions: ["Shake vigorously for best results."]
+};
+
 const honeySugarTest: TestProcedure = {
   aim: "To detect sugar solution in honey.",
   materials: ["Transparent glass", "Water", "Honey sample"],
@@ -119,6 +132,19 @@ const teaIronFilingsTest: TestProcedure = {
   precautions: ["Use a strong magnet for better detection."]
 };
 
+const teaColorTest: TestProcedure = {
+  aim: "To detect artificial color in tea leaves.",
+  materials: ["Filter paper or white blotting paper", "Water", "Tea leaves"],
+  procedure: [
+    "Spread some tea leaves on a white filter paper.",
+    "Sprinkle some water on the leaves to make the paper wet.",
+    "Remove the leaves and observe the paper."
+  ],
+  observation: "Pure tea leaves will not stain the paper immediately. Artificially colored tea will leave pink or red spots/streaks on the paper.",
+  conclusion: "Colored spots on the paper indicate added artificial color.",
+  precautions: ["Use white paper for clear visibility."]
+};
+
 const chilliBrickPowderTest: TestProcedure = {
   aim: "To detect brick powder in chilli powder.",
   materials: ["Beaker", "Water", "Chilli powder sample"],
@@ -130,6 +156,19 @@ const chilliBrickPowderTest: TestProcedure = {
   observation: "Pure chilli powder floats on the surface. Brick powder settles at the bottom quickly.",
   conclusion: "Red sediment at the bottom indicates brick powder.",
   precautions: ["Do not disturb the water while observing."]
+};
+
+const chilliColorTest: TestProcedure = {
+  aim: "To detect artificial color (Rhodamine B) in chilli powder.",
+  materials: ["Glass of water", "Chilli powder sample"],
+  procedure: [
+    "Take a glass of water.",
+    "Sprinkle a small quantity of chilli powder on the surface.",
+    "Observe the water carefully."
+  ],
+  observation: "If colored streaks descend from the floating powder, artificial color is present. Pure powder floats without releasing color immediately.",
+  conclusion: "Reddish streaks indicate the presence of artificial water-soluble dyes.",
+  precautions: ["Do not stir the water immediately."]
 };
 
 const blackPepperPapayaTest: TestProcedure = {
@@ -163,7 +202,7 @@ export const FOOD_DATABASE: FoodItem[] = [
     icon: Flame,
     adulterants: [
       { id: 'brick', name: 'Brick Powder', test: chilliBrickPowderTest },
-      { id: 'artificial_color', name: 'Artificial Color' } // Example without test to trigger AI
+      { id: 'artificial_color', name: 'Artificial Color', test: chilliColorTest }
     ]
   },
   {
@@ -173,7 +212,7 @@ export const FOOD_DATABASE: FoodItem[] = [
     adulterants: [
       { id: 'water', name: 'Water', test: milkWaterTest },
       { id: 'starch', name: 'Starch', test: milkStarchTest },
-      { id: 'detergent', name: 'Detergent' }
+      { id: 'detergent', name: 'Detergent', test: milkDetergentTest }
     ]
   },
   {
@@ -206,7 +245,7 @@ export const FOOD_DATABASE: FoodItem[] = [
     icon: Leaf,
     adulterants: [
       { id: 'iron', name: 'Iron Filings', test: teaIronFilingsTest },
-      { id: 'color', name: 'Artificial Color' }
+      { id: 'color', name: 'Artificial Color', test: teaColorTest }
     ]
   },
   {

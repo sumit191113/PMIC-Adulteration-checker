@@ -40,53 +40,6 @@ export const TestDetailsScreen: React.FC<TestDetailsScreenProps> = ({
   onToggleFavorite
 }) => {
   
-  // Progress Simulation State
-  const [progress, setProgress] = useState(0);
-  const [loadingStep, setLoadingStep] = useState(0);
-
-  const loadingMessages = [
-    "Initializing experiment parameters...",
-    "Analyzing food composition...",
-    "Scanning for potential chemical reactions...",
-    "Consulting scientific database...",
-    "Formulating safety precautions...",
-    "Finalizing test procedure..."
-  ];
-
-  useEffect(() => {
-    let progressInterval: any;
-    let textInterval: any;
-
-    if (isGenerating) {
-      setProgress(0);
-      setLoadingStep(0);
-
-      // Simulate Progress Bar
-      progressInterval = setInterval(() => {
-        setProgress(prev => {
-          // Fast at first, slows down at the end to wait for API
-          const remaining = 100 - prev;
-          const increment = Math.max(0.1, Math.random() * (remaining / 10)); 
-          const next = prev + increment;
-          return next >= 98 ? 98 : next;
-        });
-      }, 150);
-
-      // Cycle text messages
-      textInterval = setInterval(() => {
-        setLoadingStep(prev => (prev + 1) % loadingMessages.length);
-      }, 1500);
-
-    } else {
-      setProgress(0);
-    }
-
-    return () => {
-      clearInterval(progressInterval);
-      clearInterval(textInterval);
-    };
-  }, [isGenerating]);
-
   const handleShare = async () => {
     if (!activeTest || !selectedFood) return;
     
@@ -212,58 +165,6 @@ export const TestDetailsScreen: React.FC<TestDetailsScreenProps> = ({
   // START SCREEN: Displayed before the test is generated
   // -------------------------------------------------------------------------
   if (!activeTest) {
-
-    // Improved Loading Screen
-    if (isGenerating) {
-      return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] px-8 text-center animate-fade-in py-12">
-          {/* Animated Loader Circle */}
-          <div className="relative mb-8 w-40 h-40">
-            {/* Outer spinning ring */}
-            <div className="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
-            <div 
-              className="absolute inset-0 border-4 border-t-primary-500 border-r-primary-500 border-b-transparent border-l-transparent rounded-full animate-spin"
-              style={{ animationDuration: '1.5s' }}
-            ></div>
-            
-            {/* Inner Content */}
-            <div className="absolute inset-2 bg-white rounded-full flex flex-col items-center justify-center shadow-inner">
-               <span className="text-3xl font-bold text-slate-800 tabular-nums">
-                 {Math.round(progress)}<span className="text-lg text-primary-500">%</span>
-               </span>
-            </div>
-
-            {/* Orbiting particles */}
-            <div className="absolute inset-0 animate-spin-slow" style={{ animationDuration: '3s' }}>
-              <div className="absolute -top-1 left-1/2 -ml-1 w-3 h-3 bg-science-blue rounded-full shadow-lg shadow-science-blue/50"></div>
-            </div>
-          </div>
-
-          <h3 className="text-xl font-bold text-slate-800 mb-2 animate-pulse">
-            Generating Experiment
-          </h3>
-          
-          <div className="h-6 overflow-hidden mb-8">
-            <p className="text-slate-500 text-sm font-medium transition-all duration-300 transform">
-              {loadingMessages[loadingStep]}
-            </p>
-          </div>
-
-          {/* Progress Bar */}
-          <div className="w-full max-w-xs bg-slate-100 h-2 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-gradient-to-r from-primary-400 to-primary-600 transition-all duration-200 ease-out"
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
-          
-          <p className="mt-8 text-xs text-slate-400 max-w-xs mx-auto">
-            AI is analyzing {selectedFood?.name} and designing a safe procedure to detect {selectedAdulterant?.name}.
-          </p>
-        </div>
-      );
-    }
-
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] px-6 text-center animate-fade-in py-12">
         
@@ -271,7 +172,7 @@ export const TestDetailsScreen: React.FC<TestDetailsScreenProps> = ({
         <div className="relative mb-8">
             <div className="absolute inset-0 bg-primary-200 blur-xl opacity-40 rounded-full animate-pulse-slow"></div>
             <div className="w-24 h-24 bg-gradient-to-br from-white to-primary-50 rounded-full flex items-center justify-center shadow-lg border border-primary-100 relative z-10">
-               <Sparkles size={40} className="text-primary-600 drop-shadow-sm" />
+               <BookOpen size={40} className="text-primary-600 drop-shadow-sm" />
             </div>
             {/* Decorative dots */}
             <div className="absolute top-0 right-0 w-3 h-3 bg-science-blue rounded-full animate-bounce"></div>
@@ -291,7 +192,7 @@ export const TestDetailsScreen: React.FC<TestDetailsScreenProps> = ({
         </div>
 
         <p className="text-slate-500 my-8 max-w-xs leading-relaxed text-sm">
-          Our AI will analyze this combination and generate a verified, step-by-step scientific procedure for you to perform safely.
+          A verified scientific procedure is available for this test. Click below to view the steps.
         </p>
 
         {/* Action Button */}
@@ -302,16 +203,10 @@ export const TestDetailsScreen: React.FC<TestDetailsScreenProps> = ({
                 className="py-4 text-lg shadow-xl shadow-primary-500/20 hover:shadow-primary-500/30 transition-all transform hover:-translate-y-1"
             >
               <div className="flex items-center justify-center gap-2">
-                <Sparkles size={20} /> 
-                <span>Generate Test</span>
+                <Eye size={20} /> 
+                <span>View Experiment</span>
               </div>
             </Button>
-          {aiError && (
-            <div className="mt-4 p-3 bg-red-50 text-red-600 text-sm rounded-xl border border-red-100 flex items-center gap-2 text-left">
-                <ShieldAlert size={16} className="shrink-0" />
-                {aiError}
-            </div>
-          )}
         </div>
       </div>
     );
@@ -325,7 +220,7 @@ export const TestDetailsScreen: React.FC<TestDetailsScreenProps> = ({
       <div className="mb-6 flex justify-between items-start">
         <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-50 text-primary-700 text-sm font-medium rounded-full mb-2 border border-primary-100">
-                <Beaker size={14} /> Experiment Generated
+                <Beaker size={14} /> Experiment Procedure
             </div>
             <h2 className="text-2xl font-bold text-slate-800 leading-snug pr-4">
                 Detecting {selectedAdulterant?.name} in {selectedFood?.name}

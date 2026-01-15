@@ -3,7 +3,6 @@ import Button from './Button';
 import { Camera, AlertTriangle, X, Calendar, Type, Tag } from 'lucide-react';
 import { Report } from '../types';
 import { saveReport, compressImage } from '../services/reportService';
-import { isConfigured } from '../services/firebaseConfig';
 
 interface ReportFormScreenProps {
   onSubmitSuccess: () => void;
@@ -57,7 +56,7 @@ export const ReportFormScreen: React.FC<ReportFormScreenProps> = ({ onSubmitSucc
     setIsSubmitting(true);
 
     const newReport: Report = {
-      id: Date.now().toString(), // Temporary ID, backend generates real one
+      id: Date.now().toString(), 
       reporterName: formData.name || 'Anonymous',
       foodName: formData.foodItem,
       adulterantName: formData.adulterant,
@@ -105,11 +104,9 @@ export const ReportFormScreen: React.FC<ReportFormScreenProps> = ({ onSubmitSucc
         <h2 className="text-2xl font-bold text-slate-800">New Complaint</h2>
         <p className="text-slate-500 text-sm">Fill in the details to report an adulterated product.</p>
         
-        {!isConfigured && (
-           <div className="mt-4 p-3 bg-blue-50 text-blue-800 text-xs rounded-lg border border-blue-100">
-             <strong>Note:</strong> App is in Offline Mode. Reports will only be saved on this device until a database is configured.
-           </div>
-        )}
+        <div className="mt-4 p-3 bg-blue-50 text-blue-800 text-xs rounded-lg border border-blue-100">
+             <strong>Note:</strong> App is in Offline Mode. Reports will be saved locally on this device.
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -244,7 +241,7 @@ export const ReportFormScreen: React.FC<ReportFormScreenProps> = ({ onSubmitSucc
             disabled={isSubmitting}
             className="shadow-xl shadow-primary-500/20 py-4 text-lg"
           >
-            {isSubmitting ? 'Uploading to Database...' : 'Submit Complaint'}
+            {isSubmitting ? 'Saving...' : 'Save Report'}
           </Button>
         </div>
 

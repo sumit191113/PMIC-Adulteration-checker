@@ -1,79 +1,39 @@
-import { db, isConfigured } from './firebaseConfig';
-import { collection, addDoc, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { Report } from '../types';
 
-const COLLECTION_NAME = 'reports';
 const LOCAL_STORAGE_KEY = 'pmic_reports';
 
 /**
- * Saves a report to either Firebase (if configured) or LocalStorage.
+ * Saves a report to LocalStorage (Offline only).
  */
 export const saveReport = async (report: Report): Promise<void> => {
-  if (isConfigured && db) {
-    try {
-      // Create a copy without the ID (Firestore generates ID)
-      const { id, ...reportData } = report;
-
-      // Firestore does not support 'undefined' values.
-      const cleanData: Record<string, any> = { ...reportData };
-      Object.keys(cleanData).forEach(key => {
-        if (cleanData[key] === undefined) {
-          cleanData[key] = null;
-        }
-      });
-
-      await addDoc(collection(db, COLLECTION_NAME), cleanData);
-    } catch (error: any) {
-      console.error("Error writing to Firestore", error);
-      
-      // Check for common setup errors
-      if (error.code === 'not-found' || (error.message && error.message.includes('database'))) {
-        const msg = "Database Setup Error: The Firestore database has not been created yet.\n\nPlease go to Firebase Console > Firestore Database and click 'Create Database'.";
-        alert(msg);
-      }
-      
-      throw new Error("Could not save to cloud database.");
-    }
-  } else {
     // Fallback: Local Storage
     const existing = localStorage.getItem(LOCAL_STORAGE_KEY);
     const reports = existing ? JSON.parse(existing) : [];
+    // Ensure the ID is unique if not already
+    if (!report.id) report.id = Date.now().toString();
     reports.unshift(report);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(reports));
-  }
+    
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 500));
 };
 
 /**
- * Fetches reports from either Firebase (if configured) or LocalStorage.
+ * Fetches reports from LocalStorage (Offline only).
  */
 export const getReports = async (): Promise<Report[]> => {
-  if (isConfigured && db) {
-     try {
-       const q = query(collection(db, COLLECTION_NAME), orderBy('dateOfSubmission', 'desc'), limit(50));
-       const snapshot = await getDocs(q);
-       return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Report));
-     } catch (error: any) {
-       console.error("Error reading from Firestore", error);
-       
-       // Re-throw critical setup errors so UI can display them
-       if (error.code === 'not-found' || (error.message && error.message.includes('database'))) {
-          throw new Error("DB_NOT_CREATED");
-       }
-
-       // For connectivity issues, try to fall back to local storage so user sees *something*
-       const existing = localStorage.getItem(LOCAL_STORAGE_KEY);
-       return existing ? JSON.parse(existing) : [];
-     }
-  } else {
      // Fallback: Local Storage
      const existing = localStorage.getItem(LOCAL_STORAGE_KEY);
-     return existing ? JSON.parse(existing) : [];
-  }
+     const reports = existing ? JSON.parse(existing) : [];
+     
+     // Simulate network delay
+     await new Promise(resolve => setTimeout(resolve, 300));
+     
+     return reports;
 }
 
 /**
- * Helper to compress image string to avoid DB size limits.
- * Firestore document max size is 1MB. We aim for < 500KB.
+ * Helper to compress image string.
  */
 export const compressImage = (base64Str: string, maxWidth = 800, quality = 0.7): Promise<string> => {
     return new Promise((resolve) => {

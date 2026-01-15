@@ -1,31 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Report } from '../types';
-import { User, Calendar, Tag, Search, X, CloudOff, Globe, AlertTriangle } from 'lucide-react';
+import { User, Calendar, Tag, Search, X, CloudOff, AlertTriangle } from 'lucide-react';
 import { getReports } from '../services/reportService';
-import { isConfigured } from '../services/firebaseConfig';
 
 export const ReportListScreen: React.FC = () => {
   const [reports, setReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     const loadReports = async () => {
       setLoading(true);
-      setError(null);
       try {
         const data = await getReports();
         setReports(data);
       } catch (e: any) {
         console.error("Failed to load reports", e);
-        if (e.message === "DB_NOT_CREATED") {
-           setError("Database Setup Required: Please go to Firebase Console -> Firestore Database and click 'Create Database'.");
-        } else {
-           setError("Unable to connect to database. Showing locally saved reports if available.");
-           // Even if failed, try to load local empty state
-           setReports([]); 
-        }
+        setReports([]); 
       } finally {
         setLoading(false);
       }
@@ -51,26 +42,12 @@ export const ReportListScreen: React.FC = () => {
       <div className="mb-6 flex justify-between items-start">
         <div>
           <h2 className="text-2xl font-bold text-slate-800">Community Reports</h2>
-          <p className="text-slate-500 text-sm">See what others have found.</p>
+          <p className="text-slate-500 text-sm">See local findings.</p>
         </div>
-        <div className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 border ${isConfigured ? 'bg-green-50 text-green-700 border-green-200' : 'bg-slate-100 text-slate-500 border-slate-200'}`}>
-            {isConfigured ? (
-                <> <Globe size={10} /> Online DB </>
-            ) : (
-                <> <CloudOff size={10} /> Local Mode </>
-            )}
+        <div className="px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 border bg-slate-100 text-slate-500 border-slate-200">
+             <CloudOff size={10} /> Local Mode
         </div>
       </div>
-
-      {error && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex items-start gap-3">
-          <AlertTriangle className="text-red-500 shrink-0 mt-0.5" size={20} />
-          <div>
-            <h3 className="font-bold text-red-800 text-sm mb-1">Connection Error</h3>
-            <p className="text-red-700 text-xs leading-relaxed">{error}</p>
-          </div>
-        </div>
-      )}
 
       {loading ? (
         <div className="text-center py-20">
@@ -84,7 +61,7 @@ export const ReportListScreen: React.FC = () => {
           </div>
           <h3 className="text-lg font-bold text-slate-700">No Reports Yet</h3>
           <p className="text-slate-400 max-w-xs mx-auto mt-2">
-            {error ? "Please fix the database connection to see reports." : "Be the first to submit a report about adulterated food items."}
+            Be the first to save a report about adulterated food items on this device.
           </p>
         </div>
       ) : (

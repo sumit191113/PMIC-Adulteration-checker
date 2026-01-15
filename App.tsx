@@ -6,7 +6,6 @@ import { SelectAdulterantScreen } from './components/SelectAdulterantScreen';
 import { TestDetailsScreen } from './components/TestDetailsScreen';
 import { FavoritesScreen } from './components/FavoritesScreen';
 import { AppScreen, FoodItem, Adulterant, TestProcedure, FavoriteItem } from './types';
-import { generateTestProcedure } from './services/geminiService';
 import { APP_LOGO } from './constants';
 import { School, FlaskConical, ArrowRight, Heart } from 'lucide-react';
 
@@ -17,10 +16,6 @@ const App: React.FC = () => {
   const [selectedAdulterant, setSelectedAdulterant] = useState<Adulterant | null>(null);
   const [activeTest, setActiveTest] = useState<TestProcedure | null>(null);
   const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
-  
-  // UI State
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [aiError, setAiError] = useState<string | null>(null);
   const [logoError, setLogoError] = useState(false);
 
   // Load Favorites on Mount
@@ -42,7 +37,6 @@ const App: React.FC = () => {
 
   // Navigation Handlers
   const handleBack = () => {
-    setAiError(null);
     switch (currentScreen) {
       case AppScreen.SELECT_FOOD:
         setCurrentScreen(AppScreen.HOME);
@@ -51,11 +45,6 @@ const App: React.FC = () => {
         setCurrentScreen(AppScreen.SELECT_FOOD);
         break;
       case AppScreen.TEST_DETAILS:
-        // If we came from Favorites list, go back to Favorites
-        // We can infer this if selectedFood is null or by just checking previous state (not implemented deeply)
-        // For simplicity, we check if we have food/adulterant context from selection flow
-        // Or simply: if we are viewing a "Restored" favorite, hitting back should probably go to Favorites list
-        // Let's implement a simple history check or just default behavior:
         if (selectedFood && selectedAdulterant) {
              setCurrentScreen(AppScreen.SELECT_ADULTERANT);
         } else {
@@ -79,53 +68,24 @@ const App: React.FC = () => {
   };
 
   const handleCustomFoodProceed = (name: string) => {
-    if (!name.trim()) return;
-    const customFood: FoodItem = {
-      id: 'custom_' + Date.now(),
-      name: name,
-      adulterants: [] // Custom food has no preset adulterants
-    };
-    setSelectedFood(customFood);
-    setCurrentScreen(AppScreen.SELECT_ADULTERANT);
+    // Disabled in offline mode
   };
 
   const handleAdulterantSelect = (adulterant: Adulterant) => {
     setSelectedAdulterant(adulterant);
-    // FORCE NULL to ensure we always use the "Generate Test" screen
-    // We ignore the hardcoded database test here as per requirement
-    setActiveTest(null); 
+    // In offline mode, the test is always available in the constant data
+    setActiveTest(null); // Set to null initially to show the "View Experiment" start screen
     setCurrentScreen(AppScreen.TEST_DETAILS);
   };
 
   const handleCustomAdulterantProceed = (name: string) => {
-    if (!name.trim()) return;
-    const customAdulterant: Adulterant = {
-      id: 'custom_adj_' + Date.now(),
-      name: name,
-      test: undefined
-    };
-    setSelectedAdulterant(customAdulterant);
-    setActiveTest(null); // No local test for custom
-    setCurrentScreen(AppScreen.TEST_DETAILS);
+    // Disabled in offline mode
   };
 
-  const handleAIGeneration = async () => {
-    if (!selectedFood || !selectedAdulterant) return;
-    
-    setIsGenerating(true);
-    setAiError(null);
-
-    const foodName = selectedFood.id.startsWith('custom_') ? selectedFood.name : selectedFood.name;
-    const adulterantName = selectedAdulterant.id.startsWith('custom_') ? selectedAdulterant.name : selectedAdulterant.name;
-
-    const result = await generateTestProcedure(foodName, adulterantName);
-    
-    if (result) {
-      setActiveTest(result);
-    } else {
-      setAiError("Could not generate a test at this time. Please try again later.");
+  const handleShowTest = () => {
+    if (selectedAdulterant?.test) {
+        setActiveTest(selectedAdulterant.test);
     }
-    setIsGenerating(false);
   };
 
   // Favorites Logic
@@ -215,9 +175,9 @@ const App: React.FC = () => {
         </Button>
         
         <Button onClick={handleGoToFavorites} fullWidth variant="secondary" className="text-lg py-4 shadow-lg shadow-sky-500/10 group bg-white border border-slate-100 !bg-none !text-slate-600 hover:!bg-slate-50 hover:!text-primary-600">
-           <span className="flex items-center justify-center gap-2">
+        <span className="flex items-center justify-center gap-2">
             <Heart size={20} className="group-hover:text-red-500 transition-colors" /> Favorites
-          </span>
+        </span>
         </Button>
       </div>
     </div>
@@ -233,40 +193,40 @@ const App: React.FC = () => {
         {currentScreen === AppScreen.HOME && renderHomeScreen()}
         
         {currentScreen === AppScreen.FAVORITES && (
-          <FavoritesScreen 
+        <FavoritesScreen 
             favorites={favorites}
             onSelect={handleSelectFavorite}
             onRemove={handleRemoveFavorite}
             onBack={() => setCurrentScreen(AppScreen.HOME)}
-          />
+        />
         )}
 
         {currentScreen === AppScreen.SELECT_FOOD && (
-          <SelectFoodScreen 
+        <SelectFoodScreen 
             onSelect={handleFoodSelect} 
             onCustomProceed={handleCustomFoodProceed} 
-          />
+        />
         )}
         
         {currentScreen === AppScreen.SELECT_ADULTERANT && (
-          <SelectAdulterantScreen
+        <SelectAdulterantScreen
             selectedFood={selectedFood}
             onSelect={handleAdulterantSelect}
             onCustomProceed={handleCustomAdulterantProceed}
-          />
+        />
         )}
         
         {currentScreen === AppScreen.TEST_DETAILS && (
-          <TestDetailsScreen
+        <TestDetailsScreen
             activeTest={activeTest}
             selectedFood={selectedFood}
             selectedAdulterant={selectedAdulterant}
-            isGenerating={isGenerating}
-            aiError={aiError}
-            onGenerateAI={handleAIGeneration}
+            isGenerating={false}
+            aiError={null}
+            onGenerateAI={handleShowTest}
             isFavorite={isCurrentFavorite()}
             onToggleFavorite={toggleFavorite}
-          />
+        />
         )}
       </main>
       
