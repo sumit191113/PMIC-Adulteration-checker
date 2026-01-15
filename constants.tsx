@@ -7,7 +7,12 @@ import {
   Hexagon, 
   Sparkles, 
   Leaf,
-  CircleDot
+  CircleDot,
+  Coffee,
+  Disc,
+  Snowflake,
+  Sprout,
+  Sun
 } from 'lucide-react';
 
 export const APP_LOGO = "https://i.postimg.cc/hvzH74DR/pioneer-logo2.png";
@@ -184,6 +189,164 @@ const blackPepperPapayaTest: TestProcedure = {
   precautions: ["Ensure the water is still before final observation."]
 };
 
+// --- NEW TESTS (Ghee, Coffee, Salt, Peas, Cumin, Foil) ---
+
+// Ghee
+const gheeVanaspatiTest: TestProcedure = {
+  aim: "To detect Vanaspati (Vegetable Fat) in Ghee/Butter.",
+  materials: ["Test tube", "Ghee/Butter sample", "Concentrated Hydrochloric Acid (HCl)", "Sugar"],
+  procedure: [
+    "Take 5ml of melted ghee in a test tube.",
+    "Add 5ml of concentrated HCl.",
+    "Add a pinch of sugar.",
+    "Shake well for 2 minutes and let it stand."
+  ],
+  observation: "Appearance of a crimson or dark red color in the lower acid layer.",
+  conclusion: "Crimson color indicates the presence of Vanaspati (Sesame oil marker). Pure ghee remains unchanged.",
+  precautions: ["Handle concentrated acid with extreme care."]
+};
+
+const gheeStarchTest: TestProcedure = {
+  aim: "To detect mashed potatoes or starch in Ghee/Butter.",
+  materials: ["Test tube", "Ghee/Butter sample", "Iodine solution"],
+  procedure: [
+    "Take 5ml of melted ghee in a test tube.",
+    "Add a few drops of Iodine solution (brown color)."
+  ],
+  observation: "The mixture turns blue or purple.",
+  conclusion: "Blue color indicates the presence of starch (like mashed potatoes). Pure ghee remains yellowish/brown.",
+  precautions: ["Avoid direct contact with iodine."]
+};
+
+// Coffee
+const coffeeChicoryTest: TestProcedure = {
+  aim: "To detect Chicory powder in Coffee powder.",
+  materials: ["Glass", "Water", "Coffee powder sample"],
+  procedure: [
+    "Take a glass full of water.",
+    "Gently sprinkle a teaspoon of coffee powder on the surface.",
+    "Do not stir. Observe for 5 minutes."
+  ],
+  observation: "Pure coffee floats on water. Chicory sinks almost immediately and leaves a yellowish-brown trail of color.",
+  conclusion: "Sinking particles with color trails confirm chicory adulteration.",
+  precautions: ["Keep the water still."]
+};
+
+const coffeeColorTest: TestProcedure = {
+  aim: "To detect artificial clay or date seeds in Coffee.",
+  materials: ["Filter paper", "Coffee powder sample", "Magnifying glass (optional)"],
+  procedure: [
+    "Spread the coffee powder on a white filter paper.",
+    "Press the particles gently with a finger.",
+    "Use a magnifying glass to check distinct shapes."
+  ],
+  observation: "Date seeds are very hard and difficult to break. Coffee particles are brittle.",
+  conclusion: "Hard, distinct particles indicate adulteration with ground seeds.",
+  precautions: ["Ensure good lighting."]
+};
+
+// Salt
+const saltChalkTest: TestProcedure = {
+  aim: "To detect Chalk powder in Common Salt.",
+  materials: ["Glass or Beaker", "Water", "Salt sample"],
+  procedure: [
+    "Dissolve a spoon of salt in a glass of water.",
+    "Stir well and let it settle."
+  ],
+  observation: "Pure salt dissolves completely creating a clear solution. Chalk powder makes the water turbid (white and cloudy) and settles at the bottom.",
+  conclusion: "White residue and turbidity indicate chalk powder.",
+  precautions: ["Use clean water."]
+};
+
+const saltGritTest: TestProcedure = {
+  aim: "To detect sand or grit in Common Salt.",
+  materials: ["Glass", "Water", "Salt sample"],
+  procedure: [
+    "Add salt to water and stir until dissolved.",
+    "Observe the bottom of the glass."
+  ],
+  observation: "Sand or stone particles will not dissolve and will settle at the bottom as grey/black residue.",
+  conclusion: "Residue confirms the presence of sand or grit.",
+  precautions: ["Stir thoroughly to ensure salt is dissolved."]
+};
+
+// Green Peas
+const peasMalachiteTest: TestProcedure = {
+  aim: "To detect Malachite Green (artificial dye) in Green Peas.",
+  materials: ["Beaker", "Water", "Green peas", "White blotting paper"],
+  procedure: [
+    "Take a handful of green peas in a beaker.",
+    "Add enough water to cover them and mix.",
+    "Let it stand for 30 minutes, or rub a pea on white blotting paper."
+  ],
+  observation: "Water turns green or the blotting paper gets a green stain.",
+  conclusion: "Green color leaking into water or paper indicates artificial dye (Malachite Green).",
+  precautions: ["Malachite green is toxic; do not consume tested peas."]
+};
+
+const peasTextureTest: TestProcedure = {
+  aim: "To detect artificial/dried peas masquerading as fresh peas.",
+  materials: ["Green peas sample", "Water"],
+  procedure: [
+    "Soak the peas in water for an hour.",
+    "Press the peas with your fingers."
+  ],
+  observation: "Fresh peas are soft and tender. Rehydrated dried peas or artificial peas remain hard or shriveled.",
+  conclusion: "Hard texture indicates old dried peas dyed to look fresh.",
+  precautions: ["None."]
+};
+
+// Cumin
+const cuminCharcoalTest: TestProcedure = {
+  aim: "To detect Charcoal dust on Cumin seeds.",
+  materials: ["Cumin seeds sample", "Your hands"],
+  procedure: [
+    "Take a pinch of cumin seeds.",
+    "Rub them vigorously between your palms."
+  ],
+  observation: "If palms turn black, it indicates a coating of charcoal dust.",
+  conclusion: "Black stain on skin confirms charcoal adulteration.",
+  precautions: ["Wash hands after the test."]
+};
+
+const cuminGrassTest: TestProcedure = {
+  aim: "To detect grass seeds colored with charcoal in Cumin.",
+  materials: ["Glass", "Water", "Cumin seeds sample"],
+  procedure: [
+    "Pour the seeds into a glass of water.",
+    "Allow them to settle."
+  ],
+  observation: "Grass seeds are lighter and may float or behave differently than heavy cumin seeds. The water may turn blackish due to color coating.",
+  conclusion: "Black color in water confirms artificial dyeing.",
+  precautions: ["Do not stir initially."]
+};
+
+// Silver Foil
+const foilBurnTest: TestProcedure = {
+  aim: "To detect Aluminium foil masquerading as Silver Foil (Vark).",
+  materials: ["Silver foil sample", "Flame (match or lighter)", "Forceps"],
+  procedure: [
+    "Take a small piece of the foil using forceps.",
+    "Hold it over a flame."
+  ],
+  observation: "Pure silver foil burns away completely leaving a glistening ball of silver. Aluminium foil turns into grey ash/black residue and may not form a distinct ball easily.",
+  conclusion: "Grey ash indicates aluminium adulteration.",
+  precautions: ["Use fire carefully."]
+};
+
+const foilRubTest: TestProcedure = {
+  aim: "To differentiate Silver Foil from Aluminium Foil by touch.",
+  materials: ["Silver foil sample", "Fingers"],
+  procedure: [
+    "Take a piece of the foil.",
+    "Rub it between your fingers."
+  ],
+  observation: "Pure silver foil is very fragile and crumbles into fine powder immediately. Aluminium foil is malleable and will roll up into a ball or stay as a sheet.",
+  conclusion: "If it remains intact or rolls up, it is Aluminium.",
+  precautions: ["Ensure hands are dry."]
+};
+
+
 // --- Data Structure ---
 
 export const FOOD_DATABASE: FoodItem[] = [
@@ -224,6 +387,15 @@ export const FOOD_DATABASE: FoodItem[] = [
     ]
   },
   {
+    id: 'ghee',
+    name: 'Ghee / Butter',
+    icon: Sun,
+    adulterants: [
+      { id: 'vanaspati', name: 'Vanaspati', test: gheeVanaspatiTest },
+      { id: 'starch_ghee', name: 'Starch/Potatoes', test: gheeStarchTest }
+    ]
+  },
+  {
     id: 'sugar',
     name: 'Sugar',
     icon: Sparkles,
@@ -249,11 +421,56 @@ export const FOOD_DATABASE: FoodItem[] = [
     ]
   },
   {
+    id: 'coffee',
+    name: 'Coffee Powder',
+    icon: Coffee,
+    adulterants: [
+      { id: 'chicory', name: 'Chicory Powder', test: coffeeChicoryTest },
+      { id: 'seeds', name: 'Date/Tamarind Seeds', test: coffeeColorTest }
+    ]
+  },
+  {
     id: 'black_pepper',
     name: 'Black Pepper',
     icon: CircleDot,
     adulterants: [
       { id: 'papaya', name: 'Papaya Seeds', test: blackPepperPapayaTest }
+    ]
+  },
+  {
+    id: 'salt',
+    name: 'Common Salt',
+    icon: Snowflake,
+    adulterants: [
+      { id: 'salt_chalk', name: 'Chalk Powder', test: saltChalkTest },
+      { id: 'salt_grit', name: 'Sand / Grit', test: saltGritTest }
+    ]
+  },
+  {
+    id: 'peas',
+    name: 'Green Peas',
+    icon: Sprout,
+    adulterants: [
+      { id: 'malachite', name: 'Malachite Green', test: peasMalachiteTest },
+      { id: 'texture', name: 'Artificial/Dried Peas', test: peasTextureTest }
+    ]
+  },
+  {
+    id: 'cumin',
+    name: 'Cumin Seeds',
+    icon: Leaf, 
+    adulterants: [
+      { id: 'charcoal', name: 'Charcoal Dust', test: cuminCharcoalTest },
+      { id: 'grass', name: 'Grass Seeds', test: cuminGrassTest }
+    ]
+  },
+  {
+    id: 'silver_foil',
+    name: 'Silver Foil (Vark)',
+    icon: Disc,
+    adulterants: [
+      { id: 'alum_rub', name: 'Aluminium (Touch Test)', test: foilRubTest },
+      { id: 'alum_burn', name: 'Aluminium (Burn Test)', test: foilBurnTest }
     ]
   }
 ];

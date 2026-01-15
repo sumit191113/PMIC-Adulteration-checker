@@ -59,6 +59,14 @@ const App: React.FC = () => {
     }
   };
 
+  const handleHome = () => {
+    setCurrentScreen(AppScreen.HOME);
+    // Optional: Reset selection state if you want a fresh start
+    // setSelectedFood(null);
+    // setSelectedAdulterant(null);
+    // setActiveTest(null);
+  };
+
   const handleStart = () => setCurrentScreen(AppScreen.SELECT_FOOD);
   const handleGoToFavorites = () => setCurrentScreen(AppScreen.FAVORITES);
 
@@ -188,6 +196,7 @@ const App: React.FC = () => {
       <Header 
         showBack={currentScreen !== AppScreen.HOME} 
         onBack={handleBack} 
+        onHome={handleHome}
       />
       <main className="w-full flex-grow flex flex-col">
         {currentScreen === AppScreen.HOME && renderHomeScreen()}
